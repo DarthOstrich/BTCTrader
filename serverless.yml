@@ -23,7 +23,8 @@ functions:
     description: "Buys Bitcon"
     handler: handler.maketrade
     events:
-      - schedule: cron(0 12 ? * MON-THU *)
+      - schedule: cron(0 12 ? * MON-FRI *)
+      # - schedule: cron(0 12 ? * MON-THU *)
 #    Define function environment variables here
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
