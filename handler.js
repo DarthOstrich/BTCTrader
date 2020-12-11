@@ -5,11 +5,10 @@ const { API_URL, API_SECRET, API_KEY, API_PASSPHRASE } = process.env;
 const timestamp = Date.now() / 1000;
 
 function createSignature(timestamp, method, requestPath, body) {
-  var secret = API_SECRET;
+  const secret = API_SECRET;
 
   // create the prehash string by concatenating required parts
-  var what = `${timestamp + method + requestPath}${body ? body : ""}`;
-  console.log(what);
+  let what = `${timestamp + method + requestPath}${body ? body : ""}`;
 
   // decode the base64 secret
   var key = Buffer.from(secret, "base64");
@@ -44,7 +43,7 @@ module.exports.maketrade = async (event) => {
     },
   };
   console.log(requestURI, requestOptions);
-  const request = axios({
+  const request = await axios({
     method: method,
     url: requestURI,
     data: requestTrade,
@@ -52,13 +51,14 @@ module.exports.maketrade = async (event) => {
   })
     .then(function (response) {
       // handle success
-      message = "it ran";
-      console.log(response.data);
+      const { product_id, specified_funds } = response.data;
+      message = `Buy Succeeded: ${product_id}, $${specified_funds} `;
+      // console.log(response.data);
     })
     .catch(function (error) {
       // handle error
-      message = "error";
-      console.log(error.response.data);
+      message = error.response.data;
+      // console.log(error.response.data);
     });
 
   return {
