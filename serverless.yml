@@ -20,5 +20,8 @@ functions:
     description: "Buys Bitcon"
     handler: handler.maketrade
     events:
-      - schedule: cron(0 12 ? * MON-FRI *)
-      # - schedule: cron(0 12 ? * MON-THU *)
+      - schedule: 
+          rate: cron(0 12 ? * MON-FRI *)
+          name: bitcon-buyer-${opt:stage, 'dev'}
+          # rate: cron(0 12 ? * MON-THU *)
+          description: "Buys Bitcon MON-FRI"
