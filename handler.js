@@ -4,7 +4,7 @@ const crypto = require("crypto");
 const { API_URL, API_SECRET, API_KEY, API_PASSPHRASE } = process.env;
 const timestamp = Date.now() / 1000;
 
-function createSignature(tyimestamp, method, requestPath, body) {
+function createSignature(timestamp, method, requestPath, body) {
   var secret = API_SECRET;
 
   // create the prehash string by concatenating required parts
@@ -75,12 +75,6 @@ module.exports.maketrade = async (event) => {
 };
 
 module.exports.transferFunds = async (event) => {
-  // var body = JSON.stringify({
-  //   price: "1.0",
-  //   size: "1.0",
-  //   side: "buy",
-  //   product_id: "BTC-USD",
-  // });
   return {
     statusCode: 200,
     body: JSON.stringify(
