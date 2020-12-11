@@ -50,6 +50,12 @@ provider:
 functions:
   maketrade:
     handler: handler.maketrade
+    events:
+      - schedule:
+        cron: (0 12 ? * MON-THU *)
+        name: buy-bitcoin-${opt:stage, 'dev'}
+        description: "Buys Bitcon"
+        enabled: true
 #    Define function environment variables here
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
