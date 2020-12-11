@@ -18,44 +18,12 @@ provider:
     API_SECRET: ${file(env.yml):${self:provider.stage}.API_SECRET}
     API_PASSPHRASE: ${file(env.yml):${self:provider.stage}.API_PASSPHRASE}
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
-
 functions:
   maketrade:
+    description: "Buys Bitcon"
     handler: handler.maketrade
     events:
-      - schedule:
-        cron: (0 12 ? * MON-THU *)
-        name: buy-bitcoin-${opt:stage, 'dev'}
-        description: "Buys Bitcon"
-        enabled: true
+      - schedule: cron(0 12 ? * MON-THU *)
 #    Define function environment variables here
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
