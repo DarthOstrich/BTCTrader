@@ -1,0 +1,22 @@
+{
+  "name": "btctrader",
+  "version": "1.0.0",
+  "description": "Trades bitcoin",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DarthOstrich/BTCTrader.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DarthOstrich/BTCTrader/issues"
+  },
+  "homepage": "https://github.com/DarthOstrich/BTCTrader#readme",
+  "dependencies": {
+    "axios": "^0.21.0"
+  }
+}
