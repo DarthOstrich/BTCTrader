@@ -2,7 +2,6 @@
 const axios = require("axios");
 const crypto = require("crypto");
 const { API_URL, API_SECRET, API_KEY, API_PASSPHRASE } = process.env;
-const timestamp = Date.now() / 1000;
 
 function createSignature(timestamp, method, requestPath, body) {
   const secret = API_SECRET;
@@ -22,6 +21,7 @@ function createSignature(timestamp, method, requestPath, body) {
 }
 
 module.exports.maketrade = async (event) => {
+  const timestamp = Date.now() / 1000;
   let message = "";
   const method = "POST";
   const requestPath = "/orders";
@@ -29,7 +29,7 @@ module.exports.maketrade = async (event) => {
     product_id: "BTC-USD",
     side: "buy",
     type: "market",
-    funds: "10.00",
+    funds: "5.00",
   };
   const body = JSON.stringify(requestTrade);
   const requestURI = process.env.API_URL + requestPath;
