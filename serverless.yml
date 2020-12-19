@@ -28,7 +28,7 @@ functions:
             productID: "BTC-USD" 
             amount: "5.00"
       - schedule: 
-          rate: cron(1 5 ? * MON-FRI *) # Mon - Fri at 5:01AM UTC / 12AM EST
+          rate: cron(1 5 ? * * *) # Every Day at 5:01AM UTC / 12AM EST
           name: eth-buyer-${opt:stage, 'dev'}
           description: "Buys $5 Eth Mon - Fri"
           input: 
