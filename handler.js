@@ -21,15 +21,16 @@ function createSignature(timestamp, method, requestPath, body) {
 }
 
 module.exports.maketrade = async (event) => {
+  const { productID, amount } = event;
   const timestamp = Date.now() / 1000;
   let message = "";
   const method = "POST";
   const requestPath = "/orders";
   const requestTrade = {
-    product_id: "BTC-USD",
+    product_id: productID,
     side: "buy",
     type: "market",
-    funds: "5.00",
+    funds: amount,
   };
   const body = JSON.stringify(requestTrade);
   const requestURI = process.env.API_URL + requestPath;
@@ -42,7 +43,7 @@ module.exports.maketrade = async (event) => {
       "CB-ACCESS-PASSPHRASE": API_PASSPHRASE,
     },
   };
-  console.log(requestURI, requestOptions);
+  // console.log(requestURI, requestOptions);
   const request = await axios({
     method: method,
     url: requestURI,
