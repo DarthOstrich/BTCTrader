@@ -21,14 +21,14 @@ functions:
     handler: handler.maketrade
     events:
       - schedule: 
-          rate: cron(0 0 ? * * *) # Every Day at 5AM UTC / 12AM GMT 
+          rate: cron(55 23 ? * * *) # Every Day at 4:55 PM UTC / 11:55 PM GMT / 15:55 PST
           name: bitcon-buyer-${opt:stage, 'dev'}
           description: "Buys $5 Bitcon Every Day"
           input: 
             productID: "BTC-USD" 
             amount: "5.00"
       - schedule: 
-          rate: cron(1 0 ? * * *) # Every Day at 5:01AM UTC / 12AM GMT 
+          rate: cron(56 23 ? * * *) # Every Day at 4:56 PM UTC / 11:56 PM GMT / 15:56 PST 
           name: eth-buyer-${opt:stage, 'dev'}
           description: "Buys $5 Eth Mon - Fri"
           input: 
