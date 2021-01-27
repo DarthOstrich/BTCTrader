@@ -16,6 +16,15 @@ provider:
     API_PASSPHRASE: ${file(env.yml):${self:provider.stage}.API_PASSPHRASE}
 
 functions:
+  getFills:
+    description: "Get Recent Fills"
+    handler: handler.getFills
+  getLastTrade:
+    description: "getLastTrade"
+    handler: handler.getLastTrade
+  getMarketPrice:
+    description: "Get Price"
+    handler: handler.getMarketPrice
   maketrade:
     description: "Buys Crypto Every Day"
     handler: handler.maketrade
