@@ -89,8 +89,8 @@ module.exports.maketrade = async (event) => {
   const timestamp = Date.now() / 1000;
   // if trade completed for the day already, stop
   const tradeCompletedForToday = checkIfSameDay(lastDate, timestamp);
-  console.log("last trade:", lastPrice, lastDate);
-  // console.log("trade completed today already", tradeCompletedForToday);
+  // console.log("last trade:", lastPrice, lastDate);
+  console.log("trade completed today already", tradeCompletedForToday);
   if (tradeCompletedForToday) {
     message = "Trade completed for the day.";
     return {
@@ -107,7 +107,7 @@ module.exports.maketrade = async (event) => {
   // if the price difference matches the percent, trade
   const marketPrice = await getMarketPrice(productID);
   const checkPercent = checkPercentDiff(lastPrice, marketPrice, spread);
-  // console.log("trade diff", checkPercent);
+  console.log("trade diff", checkPercent);
   // console.log("market price", marketPrice);
   if (!checkPercent) {
     message = "The spread doesn't match the percentage supplied";
