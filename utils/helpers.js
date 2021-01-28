@@ -2,7 +2,7 @@ exports.checkTimeToTrade = (timeToTrade) => {
   const [hour, minute] = timeToTrade.split(":");
   const now = new Date();
   const minutes = now.getMinutes();
-  const withinFive = minutes - minute <= 5 && minutes - minute >= -5;
+  const withinFive = Math.abs(minutes - minute) <= 5;
   const rightHour = hour == now.getHours();
   if (!rightHour) {
     console.log("Wrong hour");
@@ -15,7 +15,7 @@ exports.checkTimeToTrade = (timeToTrade) => {
   return true;
 };
 
-exports.checkIfSameDay = (lastDate, timestamp) => {
+exports.checkIfSameDay = (lastDate) => {
   const d1 = new Date();
   const d2 = new Date(lastDate);
   const same = d1.getDay() === d2.getDay();
