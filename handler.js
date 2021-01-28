@@ -2,19 +2,7 @@
 const axios = require("axios");
 const crypto = require("crypto");
 const { API_URL, API_SECRET, API_KEY, API_PASSPHRASE } = process.env;
-
-function checkIfSameDay(lastDate, timestamp) {
-  const d1 = new Date();
-  const d2 = new Date(lastDate);
-  const same = d1.getDay() === d2.getDay();
-  return same;
-}
-
-function checkPercentDiff(last, current, diff) {
-  const percent = 1.0 - diff / 100;
-  console.log(last, current, last * percent);
-  return current < last * percent;
-}
+const { checkTimeToTrade, checkIfSameDay, checkPercentDiff } = require("./utils/helpers");
 
 function createSignature(timestamp, method, requestPath, body) {
   const secret = API_SECRET;
@@ -92,18 +80,17 @@ async function getMarketPrice(productID) {
 }
 
 module.exports.maketrade = async (event) => {
-  const { productID, amount } = event;
+  const { productID, amount, timeToTrade, spread } = event;
   let message = "";
 
   // get previous transaction data
   const { price: lastPrice, created_at: lastDate } = await getLastTrade(productID);
 
   const timestamp = Date.now() / 1000;
-
   // if trade completed for the day already, stop
   const tradeCompletedForToday = checkIfSameDay(lastDate, timestamp);
   console.log("last trade:", lastPrice, lastDate);
-  console.log("trade completed today already", tradeCompletedForToday);
+  // console.log("trade completed today already", tradeCompletedForToday);
   if (tradeCompletedForToday) {
     message = "Trade completed for the day.";
     return {
@@ -119,9 +106,9 @@ module.exports.maketrade = async (event) => {
   }
   // if the price difference matches the percent, trade
   const marketPrice = await getMarketPrice(productID);
-  const checkPercent = checkPercentDiff(lastPrice, marketPrice, 10);
-  console.log("trade diff", checkPercent);
-  console.log("market price", marketPrice);
+  const checkPercent = checkPercentDiff(lastPrice, marketPrice, spread);
+  // console.log("trade diff", checkPercent);
+  // console.log("market price", marketPrice);
   if (!checkPercent) {
     message = "The spread doesn't match the percentage supplied";
     return {
@@ -137,6 +124,19 @@ module.exports.maketrade = async (event) => {
   }
 
   // if the time matches chosen time, trade
+  if (!checkTimeToTrade(timeToTrade)) {
+    message = "It is not time to trade";
+    return {
+      statusCode: 200,
+      body: JSON.stringify(
+        {
+          message: message,
+        },
+        null,
+        2
+      ),
+    };
+  }
 
   const method = "POST";
   const requestPath = "/orders";
