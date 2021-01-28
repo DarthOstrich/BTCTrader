@@ -87,6 +87,7 @@ module.exports.maketrade = async (event) => {
   const { price: lastPrice, created_at: lastDate } = await getLastTrade(productID);
 
   const timestamp = Date.now() / 1000;
+
   // if trade completed for the day already, stop
   const tradeCompletedForToday = checkIfSameDay(lastDate, timestamp);
   // console.log("last trade:", lastPrice, lastDate);
@@ -105,103 +106,75 @@ module.exports.maketrade = async (event) => {
       ),
     };
   }
+
   // if the price difference matches the percent, trade
   const marketPrice = await getMarketPrice(productID);
   const checkPercent = checkPercentDiff(lastPrice, marketPrice, spread);
-  // console.log("trade diff", checkPercent);
-  // console.log("market price", marketPrice);
-  if (!checkPercent) {
-    message = "The spread doesn't match the percentage supplied";
-    console.log(message);
-    return {
-      statusCode: 200,
-      body: JSON.stringify(
-        {
-          message: message,
-        },
-        null,
-        2
-      ),
-    };
-  }
+  const checkTime = checkTimeToTrade(timeToTrade);
 
-  // if the time matches chosen time, trade
-  if (!checkTimeToTrade(timeToTrade)) {
-    message = "It is not time to trade";
-    console.log(message);
-    return {
-      statusCode: 200,
-      body: JSON.stringify(
-        {
-          message: message,
-        },
-        null,
-        2
-      ),
+  // if it is the right time, trade or percentage diff is correct
+  if (checkPercent || checkTime) {
+    const method = "POST";
+    const requestPath = "/orders";
+    const requestTrade = {
+      product_id: productID,
+      side: "buy",
+      type: "market",
+      funds: amount,
     };
-  }
-
-  const method = "POST";
-  const requestPath = "/orders";
-  const requestTrade = {
-    product_id: productID,
-    side: "buy",
-    type: "market",
-    funds: amount,
-  };
-  const body = JSON.stringify(requestTrade);
-  const requestURI = process.env.API_URL + requestPath;
-  const requestSig = createSignature(timestamp, method, requestPath, body);
-  const requestOptions = {
-    headers: {
-      "CB-ACCESS-KEY": API_KEY,
-      "CB-ACCESS-SIGN": requestSig,
-      "CB-ACCESS-TIMESTAMP": timestamp,
-      "CB-ACCESS-PASSPHRASE": API_PASSPHRASE,
-    },
-  };
-  // console.log(requestURI, requestOptions);
-  await axios({
-    method: method,
-    url: requestURI,
-    data: requestTrade,
-    headers: requestOptions.headers,
-  })
-    .then(function (response) {
-      // handle success
-      const { product_id, specified_funds } = response.data;
-      message = `Buy Succeeded: ${product_id}, $${specified_funds} `;
-      console.log(message);
+    const body = JSON.stringify(requestTrade);
+    const requestURI = process.env.API_URL + requestPath;
+    const requestSig = createSignature(timestamp, method, requestPath, body);
+    const requestOptions = {
+      headers: {
+        "CB-ACCESS-KEY": API_KEY,
+        "CB-ACCESS-SIGN": requestSig,
+        "CB-ACCESS-TIMESTAMP": timestamp,
+        "CB-ACCESS-PASSPHRASE": API_PASSPHRASE,
+      },
+    };
+    // console.log(requestURI, requestOptions);
+    await axios({
+      method: method,
+      url: requestURI,
+      data: requestTrade,
+      headers: requestOptions.headers,
     })
-    .catch(function (error) {
-      // handle error
-      message = error.response.data;
-      // console.log(error.response.data);
-    });
+      .then(function (response) {
+        // handle success
+        const { product_id, specified_funds } = response.data;
+        message = `Buy Succeeded: ${product_id}, $${specified_funds} `;
+        console.log(message);
+      })
+      .catch(function (error) {
+        // handle error
+        message = error.response.data;
+        // console.log(error.response.data);
+      });
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: message,
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
-};
-
-module.exports.transferFunds = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: "TODO: transferFunds",
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+    return {
+      statusCode: 200,
+      body: JSON.stringify(
+        {
+          message: message,
+          input: event,
+        },
+        null,
+        2
+      ),
+    };
+  } else {
+    message = `Percentage Difference match: ${checkPercent}. Time to trade: ${checkTime}`;
+    console.log(message);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(
+        {
+          message: message,
+        },
+        null,
+        2
+      ),
+    };
+  }
 };
