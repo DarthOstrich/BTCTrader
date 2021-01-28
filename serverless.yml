@@ -28,7 +28,7 @@ functions:
           input: 
             productID: "BTC-USD" 
             amount: "5.00"
-            spread: "7"
+            spread: "4"
             timeToTrade: "23:55"
       - schedule: 
           rate: cron(56 23 ? * * *) # Every Day at 4:56 PM UTC / 11:56 PM GMT / 15:56 PST 
@@ -37,5 +37,5 @@ functions:
           input: 
             productID: "ETH-USD" 
             amount: "5.00"
-            spread: "8"
+            spread: "4"
             timeToTrade: "23:56"
