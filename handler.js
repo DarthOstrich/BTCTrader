@@ -89,10 +89,11 @@ module.exports.maketrade = async (event) => {
   const timestamp = Date.now() / 1000;
   // if trade completed for the day already, stop
   const tradeCompletedForToday = checkIfSameDay(lastDate, timestamp);
-  console.log("last trade:", lastPrice, lastDate);
-  console.log("trade completed today already", tradeCompletedForToday);
+  // console.log("last trade:", lastPrice, lastDate);
+  // console.log("trade completed today already", tradeCompletedForToday);
   if (tradeCompletedForToday) {
     message = "Trade completed for the day.";
+    console.log(message);
     return {
       statusCode: 200,
       body: JSON.stringify(
@@ -107,10 +108,11 @@ module.exports.maketrade = async (event) => {
   // if the price difference matches the percent, trade
   const marketPrice = await getMarketPrice(productID);
   const checkPercent = checkPercentDiff(lastPrice, marketPrice, spread);
-  console.log("trade diff", checkPercent);
+  // console.log("trade diff", checkPercent);
   // console.log("market price", marketPrice);
   if (!checkPercent) {
     message = "The spread doesn't match the percentage supplied";
+    console.log(message);
     return {
       statusCode: 200,
       body: JSON.stringify(
@@ -126,6 +128,7 @@ module.exports.maketrade = async (event) => {
   // if the time matches chosen time, trade
   if (!checkTimeToTrade(timeToTrade)) {
     message = "It is not time to trade";
+    console.log(message);
     return {
       statusCode: 200,
       body: JSON.stringify(
@@ -168,7 +171,7 @@ module.exports.maketrade = async (event) => {
       // handle success
       const { product_id, specified_funds } = response.data;
       message = `Buy Succeeded: ${product_id}, $${specified_funds} `;
-      // console.log(response.data);
+      console.log(message);
     })
     .catch(function (error) {
       // handle error

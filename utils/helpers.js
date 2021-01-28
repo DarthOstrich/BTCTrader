@@ -24,6 +24,6 @@ exports.checkIfSameDay = (lastDate, timestamp) => {
 
 exports.checkPercentDiff = (last, current, diff) => {
   const percent = 1.0 - diff / 100;
-  console.log(last, current, last * percent);
+  // console.log(last, current, last * percent);
   return current < last * percent;
 };
