@@ -89,7 +89,7 @@ module.exports.maketrade = async (event) => {
   const timestamp = Date.now() / 1000;
   // if trade completed for the day already, stop
   const tradeCompletedForToday = checkIfSameDay(lastDate, timestamp);
-  // console.log("last trade:", lastPrice, lastDate);
+  console.log("last trade:", lastPrice, lastDate);
   console.log("trade completed today already", tradeCompletedForToday);
   if (tradeCompletedForToday) {
     message = "Trade completed for the day.";
