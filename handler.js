@@ -4,14 +4,12 @@ const crypto = require("crypto");
 const { API_URL, API_SECRET, API_KEY, API_PASSPHRASE } = process.env;
 const { checkTimeToTrade, checkIfSameDay, checkPercentDiff } = require("./utils/helpers");
 
-function createSignature(timestamp, method, requestPath, body) {
-  const secret = API_SECRET;
-
+function createSignature(API_SECRET, timestamp, method, requestPath, body) {
   // create the prehash string by concatenating required parts
   let what = `${timestamp + method + requestPath}${body ? body : ""}`;
 
   // decode the base64 secret
-  var key = Buffer.from(secret, "base64");
+  var key = Buffer.from(API_SECRET, "base64");
 
   // create a sha256 hmac with the secret
   var hmac = crypto.createHmac("sha256", key);
@@ -27,7 +25,7 @@ const getLastTrade = async (productID) => {
   const method = "GET";
   const requestURI = process.env.API_URL + requestPath;
 
-  const requestSig = createSignature(timestamp, method, requestPath);
+  const requestSig = createSignature(API_SECRET, timestamp, method, requestPath);
   const requestOptions = {
     headers: {
       "CB-ACCESS-KEY": API_KEY,
@@ -124,7 +122,7 @@ module.exports.maketrade = async (event) => {
     };
     const body = JSON.stringify(requestTrade);
     const requestURI = process.env.API_URL + requestPath;
-    const requestSig = createSignature(timestamp, method, requestPath, body);
+    const requestSig = createSignature(API_SECRET, timestamp, method, requestPath, body);
     const requestOptions = {
       headers: {
         "CB-ACCESS-KEY": API_KEY,
