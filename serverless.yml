@@ -31,7 +31,8 @@ functions:
             spread: "4"
             timeToTrade: "23:55"
       - schedule: 
-          rate: cron(56 23 ? * * *) # Every Day at 4:56 PM UTC / 11:56 PM GMT / 15:56 PST 
+          # rate: cron(56 23 ? * * *) # Every Day at 4:56 PM UTC / 11:56 PM GMT / 15:56 PST 
+          rate: cron(0/5 * ? * * *) # Every 5 minutes, looking for a price 
           name: eth-buyer-${opt:stage, 'dev'}
           description: "Buys $5 Eth Every Day"
           input: 
