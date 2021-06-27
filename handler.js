@@ -80,6 +80,7 @@ async function getMarketPrice(productID) {
 module.exports.maketrade = async (event) => {
   const { productID, amount, timeToTrade, spread } = event;
   let message = "";
+  console.log(`Attempting trade ${productID} for $${amount}`);
 
   // get previous transaction data
   const { price: lastPrice, created_at: lastDate } = await getLastTrade(productID);
