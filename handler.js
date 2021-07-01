@@ -92,7 +92,7 @@ module.exports.maketrade = async (event) => {
   // console.log("last trade:", lastPrice, lastDate);
   // console.log("trade completed today already", tradeCompletedForToday);
   if (tradeCompletedForToday) {
-    message = "Trade completed for the day.";
+    message = `${productID} Trade completed for the day.`;
     console.log(message);
     return {
       statusCode: 200,
@@ -163,7 +163,7 @@ module.exports.maketrade = async (event) => {
       ),
     };
   } else {
-    message = `Percentage Difference match: ${checkPercent}. Time to trade: ${checkTime}`;
+    message = `${productID}: Percentage Difference match: ${checkPercent}. Time to trade: ${checkTime}`;
     console.log(message);
     return {
       statusCode: 200,
