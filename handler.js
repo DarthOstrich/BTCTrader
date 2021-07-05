@@ -149,7 +149,7 @@ module.exports.maketrade = async (event) => {
       .catch(function (error) {
         // handle error
         message = error.response.data;
-        console.log(`${product_id}:`, error.response.data);
+        console.log(`${productID}:`, error.response.data);
       });
 
     return {
