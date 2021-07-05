@@ -113,6 +113,7 @@ module.exports.maketrade = async (event) => {
 
   // if it is the right time, trade or percentage diff is correct
   if (checkPercent || checkTime) {
+    console.log(`${productID} Time to Trade.`);
     const method = "POST";
     const requestPath = "/orders";
     const requestTrade = {
@@ -148,7 +149,7 @@ module.exports.maketrade = async (event) => {
       .catch(function (error) {
         // handle error
         message = error.response.data;
-        // console.log(error.response.data);
+        console.log(`${product_id}:`, error.response.data);
       });
 
     return {
