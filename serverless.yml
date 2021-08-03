@@ -33,10 +33,10 @@ functions:
       - schedule: 
           # rate: cron(56 23 ? * * *) # Every Day at 4:56 PM UTC / 11:56 PM GMT / 15:56 PST 
           rate: cron(0/5 * ? * * *) # Every 5 minutes, looking for a price 
-          name: grt-buyer-${opt:stage, 'dev'}
-          description: "Buys $5 GRT Every Day"
+          name: eth-buyer-${opt:stage, 'dev'}
+          description: "Buys $5 ETH Every Day"
           input: 
-            productID: "GRT-USD" 
+            productID: "ETH-USD" 
             amount: "5.00"
             spread: "4"
             timeToTrade: "23:56"
